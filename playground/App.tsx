@@ -6,7 +6,6 @@ import { EventBadge } from '../src/templates/EventBadge';
 import { EventTicket } from '../src/templates/EventTicket';
 import { Copy, Check, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react';
 
-// Custom Aesthetic Dropdown Component
 interface CustomSelectProps<T extends string> {
   value: T;
   options: { value: T; label: string }[];
@@ -73,7 +72,6 @@ function CustomSelect<T extends string>({ value, options, onChange, width = "w-3
   );
 }
 
-// Line-Art Outline Octocat Icon (Dissected & Styled to match Image 1)
 function LineArtGitHubIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg
@@ -86,7 +84,6 @@ function LineArtGitHubIcon({ className = "w-4 h-4" }: { className?: string }) {
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      {/* Head & Ear Silhouette Outline */}
       <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
     </svg>
   );
@@ -102,6 +99,15 @@ export default function App() {
   const [charset, setCharset] = useState<'hex' | 'numeric' | 'alpha' | 'alphanumeric'>('alphanumeric');
   const [generatedId, setGeneratedId] = useState(() => createId({ prefix: 'ORD', length: 8 }));
 
+  // Customization State
+  const [eventName, setEventName] = useState('TECH CONFERENCE 2026');
+  const [attendeeName, setAttendeeName] = useState('Alex Turner');
+  const [role, setRole] = useState('VIP PASS');
+  const [ticketDate, setTicketDate] = useState('OCT 12, 2026');
+  const [ticketTime, setTicketTime] = useState('09:00 AM');
+  const [ticketGate, setTicketGate] = useState('G3');
+  const [ticketSeat, setTicketSeat] = useState('A-12');
+
   // QR state
   const [qrSize, setQrSize] = useState(200);
   const [ecc, setEcc] = useState<'L' | 'M' | 'Q' | 'H'>('M');
@@ -109,12 +115,10 @@ export default function App() {
   // Barcode state
   const [barcodeFormat, setBarcodeFormat] = useState<'CODE128' | 'CODE39' | 'EAN13'>('CODE128');
 
-  // Regenerate ID
   const handleRegenerate = () => {
     setGeneratedId(createId({ prefix, length, charset }));
   };
 
-  // Generate code snippet text based on active tab
   const getCodeSnippet = () => {
     switch (activeTab) {
       case 'id':
@@ -124,9 +128,9 @@ export default function App() {
       case 'barcode':
         return `import { QuickBarcode } from 'id-qr-kit';\n\n<QuickBarcode value="${generatedId}" format="${barcodeFormat}" downloadable copyable />`;
       case 'badge':
-        return `import { EventBadge } from 'id-qr-kit';\n\n<EventBadge id="${generatedId}" name="Alex Turner" role="Hacker" />`;
+        return `import { EventBadge } from 'id-qr-kit';\n\n<EventBadge id="${generatedId}" name="${attendeeName}" role="${role}" eventName="${eventName}" />`;
       case 'ticket':
-        return `import { EventTicket } from 'id-qr-kit';\n\n<EventTicket id="${generatedId}" attendeeName="Alex Turner" tier="VIP PASS" />`;
+        return `import { EventTicket } from 'id-qr-kit';\n\n<EventTicket\n  id="${generatedId}"\n  eventName="${eventName}"\n  attendeeName="${attendeeName}"\n  tier="${role}"\n  date="${ticketDate}"\n  time="${ticketTime}"\n  gate="${ticketGate}"\n  seat="${ticketSeat}"\n/>`;
     }
   };
 
@@ -137,16 +141,14 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-[#111111]">
-      {/* Header */}
-      <header className="border-b border-[#E7E5E4] px-6 py-4 flex items-center justify-between bg-white z-10">
+    <div className="h-screen flex flex-col bg-white text-[#111111] overflow-hidden">
+      <header className="border-b border-[#E7E5E4] px-6 py-4 flex items-center justify-between bg-white z-10 shrink-0">
         <div className="flex items-center gap-2">
           <h1 className="font-mono text-xl font-bold tracking-wider text-black uppercase">
             ID-QR-KIT
           </h1>
         </div>
         
-        {/* GitHub Button - Image 1 Design: Squarish Rounded Box + Line Art Icon */}
         <a
           href="https://github.com/s0um1kx/id-qr-kit"
           target="_blank"
@@ -158,12 +160,10 @@ export default function App() {
         </a>
       </header>
 
-      {/* Main Workspace */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Left Sidebar Controls (320px) */}
-        <aside className="w-80 border-r border-[#E7E5E4] flex flex-col bg-white z-10">
-          {/* Navigation Tabs Header */}
-          <nav className="flex items-center border-b border-[#E7E5E4]">
+        {/* Left Sidebar Controls */}
+        <aside className="w-80 border-r border-[#E7E5E4] flex flex-col bg-white z-10 shrink-0">
+          <nav className="flex items-center border-b border-[#E7E5E4] shrink-0">
             {(['id', 'qr', 'barcode', 'badge', 'ticket'] as const).map((tab) => {
               const isActive = activeTab === tab;
               return (
@@ -182,9 +182,10 @@ export default function App() {
             })}
           </nav>
 
-          {/* Config Controls Options */}
-          <div className="p-4 flex-1 overflow-y-auto space-y-4 font-mono">
-            {/* ID Options */}
+          <div
+            className="p-4 flex-1 overflow-y-auto space-y-4 font-mono"
+            style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(161, 161, 170, 0.4) transparent' }}
+          >
             <div className="space-y-3">
               <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
                 <label className="text-xs font-medium text-[#6B6B6B]">Prefix</label>
@@ -232,7 +233,88 @@ export default function App() {
               </button>
             </div>
 
-            {/* Tab Specific Options */}
+            {(activeTab === 'badge' || activeTab === 'ticket') && (
+              <div className="pt-2 border-t border-[#E7E5E4] space-y-3">
+                <span className="text-[10px] uppercase font-bold tracking-wider text-[#A3A3A3]">
+                  Template Details
+                </span>
+                
+                <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
+                  <label className="text-xs font-medium text-[#6B6B6B]">Event Title</label>
+                  <input
+                    type="text"
+                    value={eventName}
+                    onChange={(e) => setEventName(e.target.value)}
+                    className="w-36 h-8 px-2 border border-[#E7E5E4] rounded-md text-xs focus:outline-none focus:border-[#111111] font-mono"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
+                  <label className="text-xs font-medium text-[#6B6B6B]">Attendee Name</label>
+                  <input
+                    type="text"
+                    value={attendeeName}
+                    onChange={(e) => setAttendeeName(e.target.value)}
+                    className="w-36 h-8 px-2 border border-[#E7E5E4] rounded-md text-xs focus:outline-none focus:border-[#111111] font-mono"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
+                  <label className="text-xs font-medium text-[#6B6B6B]">Role / Tier</label>
+                  <input
+                    type="text"
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                    className="w-36 h-8 px-2 border border-[#E7E5E4] rounded-md text-xs focus:outline-none focus:border-[#111111] font-mono"
+                  />
+                </div>
+
+                {activeTab === 'ticket' && (
+                  <>
+                    <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
+                      <label className="text-xs font-medium text-[#6B6B6B]">Date</label>
+                      <input
+                        type="text"
+                        value={ticketDate}
+                        onChange={(e) => setTicketDate(e.target.value)}
+                        className="w-36 h-8 px-2 border border-[#E7E5E4] rounded-md text-xs focus:outline-none focus:border-[#111111] font-mono"
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
+                      <label className="text-xs font-medium text-[#6B6B6B]">Time</label>
+                      <input
+                        type="text"
+                        value={ticketTime}
+                        onChange={(e) => setTicketTime(e.target.value)}
+                        className="w-36 h-8 px-2 border border-[#E7E5E4] rounded-md text-xs focus:outline-none focus:border-[#111111] font-mono"
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
+                      <label className="text-xs font-medium text-[#6B6B6B]">Gate</label>
+                      <input
+                        type="text"
+                        value={ticketGate}
+                        onChange={(e) => setTicketGate(e.target.value)}
+                        className="w-36 h-8 px-2 border border-[#E7E5E4] rounded-md text-xs focus:outline-none focus:border-[#111111] font-mono"
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
+                      <label className="text-xs font-medium text-[#6B6B6B]">Seat</label>
+                      <input
+                        type="text"
+                        value={ticketSeat}
+                        onChange={(e) => setTicketSeat(e.target.value)}
+                        className="w-36 h-8 px-2 border border-[#E7E5E4] rounded-md text-xs focus:outline-none focus:border-[#111111] font-mono"
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+
             {activeTab === 'qr' && (
               <div className="pt-2 border-t border-[#E7E5E4] space-y-3">
                 <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
@@ -285,15 +367,17 @@ export default function App() {
           </div>
         </aside>
 
-        {/* Right Preview & Code Section */}
-        <main className="flex-1 flex flex-col bg-[#FAFAFA]">
-          {/* Top Barcode / Element Preview Stage with Dot Pattern Background */}
+        {/* Right Preview Stage */}
+        <main className="flex-1 flex flex-col bg-[#FAFAFA] overflow-hidden min-w-0">
+          {/* Scrollable Canvas Section */}
           <div
-            className="flex-1 flex items-center justify-center p-8 overflow-auto relative"
+            className="flex-1 overflow-y-auto p-8 flex items-center justify-center relative"
             style={{
               backgroundColor: '#FAFAFA',
               backgroundImage: 'radial-gradient(#D4D4D4 1.5px, transparent 1.5px)',
               backgroundSize: '20px 20px',
+              scrollbarWidth: 'thin',
+              scrollbarColor: 'rgba(161, 161, 170, 0.4) transparent',
             }}
           >
             {activeTab === 'id' && (
@@ -314,16 +398,25 @@ export default function App() {
             )}
 
             {activeTab === 'badge' && (
-              <EventBadge id={generatedId} name="Alex Turner" role="Hacker Pass" />
+              <EventBadge id={generatedId} name={attendeeName} role={role} eventName={eventName} />
             )}
 
             {activeTab === 'ticket' && (
-              <EventTicket id={generatedId} attendeeName="Alex Turner" tier="VIP PASS" />
+              <EventTicket
+                id={generatedId}
+                eventName={eventName}
+                attendeeName={attendeeName}
+                tier={role}
+                date={ticketDate}
+                time={ticketTime}
+                gate={ticketGate}
+                seat={ticketSeat}
+              />
             )}
           </div>
 
-          {/* Bottom Code Block */}
-          <div className="border-t border-[#E7E5E4] bg-[#111111] text-white p-4 font-mono z-10">
+          {/* Fixed Bottom Code Block with Uniform Height */}
+          <div className="border-t border-[#E7E5E4] bg-[#111111] text-white p-4 font-mono z-10 shrink-0">
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] font-mono uppercase tracking-wider text-[#A3A3A3]">
                 React Code Snippet
@@ -336,7 +429,13 @@ export default function App() {
                 <span>{copied ? 'Copied' : 'Copy Snippet'}</span>
               </button>
             </div>
-            <pre className="font-mono text-xs text-[#E7E5E4] overflow-x-auto p-2 bg-[#0A0A0A] rounded border border-[#262626]">
+            <pre
+              className="h-28 font-mono text-xs text-[#E7E5E4] overflow-y-auto overflow-x-auto p-3 bg-[#0A0A0A] rounded border border-[#262626] leading-relaxed"
+              style={{
+                scrollbarWidth: 'thin',
+                scrollbarColor: 'rgba(255, 255, 255, 0.2) transparent',
+              }}
+            >
               {getCodeSnippet()}
             </pre>
           </div>

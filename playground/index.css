@@ -7,3 +7,35 @@
     letter-spacing: -0.02em;
   }
 }
+
+/* Global custom minimalist scrollbar */
+*::-webkit-scrollbar {
+  width: 3px !important;
+  height: 3px !important;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #d4d4d8 !important; /* Zinc-300 neutral gray */
+  border-radius: 9999px !important;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #71717a !important; /* Zinc-500 dark gray on hover */
+}
+
+/* Hide native scrollbar arrow buttons in WebKit browsers */
+*::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Firefox support */
+* {
+  scrollbar-width: thin !important;
+  scrollbar-color: #d4d4d8 transparent !important;
+}
