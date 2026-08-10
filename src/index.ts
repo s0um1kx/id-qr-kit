@@ -5,3 +5,4 @@ export * from './hooks/useQR';
 export * from './hooks/useBarcode';
 export * from './components/QuickQR';
 export * from './components/QuickBarcode';
+export * from './templates/EventBadge';
