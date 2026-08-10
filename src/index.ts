@@ -6,3 +6,4 @@ export * from './hooks/useBarcode';
 export * from './components/QuickQR';
 export * from './components/QuickBarcode';
 export * from './templates/EventBadge';
+export * from './templates/EventTicket';

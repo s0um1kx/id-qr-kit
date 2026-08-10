@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { createId } from '../src/core/id';
 import { QuickQR } from '../src/components/QuickQR';
 import { QuickBarcode } from '../src/components/QuickBarcode';
 import { EventBadge } from '../src/templates/EventBadge';
+import { EventTicket } from '../src/templates/EventTicket';
 import { Copy, Check, RefreshCw } from 'lucide-react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'id' | 'qr' | 'barcode' | 'badge'>('id');
+  const [activeTab, setActiveTab] = useState<'id' | 'qr' | 'barcode' | 'badge' | 'ticket'>('id');
   const [copied, setCopied] = useState(false);
 
   // Controls state
@@ -38,6 +39,8 @@ export default function App() {
         return `import { QuickBarcode } from 'id-qr-kit';\n\n<QuickBarcode value="${generatedId}" format="${barcodeFormat}" downloadable copyable />`;
       case 'badge':
         return `import { EventBadge } from 'id-qr-kit';\n\n<EventBadge id="${generatedId}" name="Alex Turner" role="Hacker" />`;
+      case 'ticket':
+        return `import { EventTicket } from 'id-qr-kit';\n\n<EventTicket id="${generatedId}" attendeeName="Alex Turner" tier="VIP PASS" />`;
     }
   };
 
@@ -71,11 +74,11 @@ export default function App() {
         <aside className="w-80 border-r border-[#E7E5E4] flex flex-col">
           {/* Tabs Header */}
           <div className="flex border-b border-[#E7E5E4]">
-            {(['id', 'qr', 'barcode', 'badge'] as const).map((tab) => (
+            {(['id', 'qr', 'barcode', 'badge', 'ticket'] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 h-10 text-xs font-medium uppercase tracking-wider transition-colors ${
+                className={`flex-1 h-10 text-[11px] font-medium uppercase tracking-wider transition-colors ${
                   activeTab === tab
                     ? 'text-[#111111] border-b-2 border-[#111111]'
                     : 'text-[#6B6B6B] hover:text-[#111111]'
@@ -209,6 +212,10 @@ export default function App() {
 
             {activeTab === 'badge' && (
               <EventBadge id={generatedId} name="Alex Turner" role="Hacker Pass" />
+            )}
+
+            {activeTab === 'ticket' && (
+              <EventTicket id={generatedId} attendeeName="Alex Turner" tier="VIP PASS" />
             )}
           </div>
 
