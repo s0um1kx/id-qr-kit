@@ -101,7 +101,7 @@ export default function App() {
 
   // Customization State
   const [eventName, setEventName] = useState('TECH CONFERENCE 2026');
-  const [attendeeName, setAttendeeName] = useState('Alex Turner');
+  const [attendeeName, setAttendeeName] = useState('Dino Mondal');
   const [role, setRole] = useState('VIP PASS');
   const [ticketDate, setTicketDate] = useState('OCT 12, 2026');
   const [ticketTime, setTicketTime] = useState('09:00 AM');
@@ -141,36 +141,38 @@ export default function App() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-white text-[#111111] overflow-hidden">
-      <header className="border-b border-[#E7E5E4] px-6 py-4 flex items-center justify-between bg-white z-10 shrink-0">
-        <div className="flex items-center gap-2">
-          <h1 className="font-mono text-xl font-bold tracking-wider text-black uppercase">
-            ID-QR-KIT
-          </h1>
-        </div>
-        
+    <div className="min-h-screen md:h-screen md:overflow-hidden flex flex-col bg-white text-[#111111]">
+      {/* Header */}
+      <header className="border-b border-[#E7E5E4] px-4 md:px-6 py-3.5 flex items-center justify-between bg-white z-20 shrink-0">
+        <h1 className="font-mono text-lg md:text-xl font-bold tracking-wider text-black uppercase">
+          ID-QR-KIT
+        </h1>
+
         <a
           href="https://github.com/s0um1kx/id-qr-kit"
           target="_blank"
           rel="noreferrer"
-          className="bg-white border border-[#D1D5DB] rounded-lg px-3.5 py-1.5 flex items-center gap-2.5 hover:bg-[#F9FAFB] transition-all shadow-xs group"
+          className="bg-white border border-[#D1D5DB] rounded-lg px-3 py-1.5 flex items-center gap-2 hover:bg-[#F9FAFB] transition-all shadow-xs group"
         >
           <LineArtGitHubIcon className="w-4 h-4 text-[#111827] group-hover:scale-105 transition-transform" />
           <span className="font-sans font-medium text-xs text-[#111827] tracking-tight">GitHub</span>
         </a>
       </header>
 
-      <div className="flex-1 flex overflow-hidden">
-        {/* Left Sidebar Controls */}
-        <aside className="w-80 border-r border-[#E7E5E4] flex flex-col bg-white z-10 shrink-0">
-          <nav className="flex items-center border-b border-[#E7E5E4] shrink-0">
+      {/* Main Container */}
+      <div className="flex-1 flex flex-col md:flex-row min-h-0 relative overflow-y-auto md:overflow-hidden">
+        {/* Left Controls Sidebar */}
+        <aside className="w-full md:w-80 border-b md:border-b-0 md:border-r border-[#E7E5E4] flex flex-col bg-white z-10 shrink-0 md:h-full">
+          {/* Clean 5-Column Navigation Grid with hidden scrollbar fallback */}
+          <nav className="grid grid-cols-5 border-b border-[#E7E5E4] shrink-0 bg-white overflow-x-auto [scrollbar-none] [&::-webkit-scrollbar]:hidden">
             {(['id', 'qr', 'barcode', 'badge', 'ticket'] as const).map((tab) => {
               const isActive = activeTab === tab;
               return (
                 <button
                   key={tab}
+                  type="button"
                   onClick={() => setActiveTab(tab)}
-                  className={`flex-1 h-11 font-mono text-xs font-bold tracking-widest uppercase transition-colors relative ${
+                  className={`py-3 px-1 font-mono text-[10px] sm:text-xs font-bold tracking-tight uppercase transition-colors relative text-center truncate ${
                     isActive
                       ? 'bg-gray-100 text-black border-b-2 border-black'
                       : 'text-gray-400 hover:text-gray-700 bg-transparent'
@@ -183,7 +185,7 @@ export default function App() {
           </nav>
 
           <div
-            className="p-4 flex-1 overflow-y-auto space-y-4 font-mono"
+            className="p-4 flex-1 overflow-y-auto space-y-4 font-mono max-h-95 md:max-h-none"
             style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(161, 161, 170, 0.4) transparent' }}
           >
             <div className="space-y-3">
@@ -225,6 +227,7 @@ export default function App() {
               </div>
 
               <button
+                type="button"
                 onClick={handleRegenerate}
                 className="w-full h-10 mt-2 bg-[#111111] hover:bg-[#262626] text-white rounded-md text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-colors font-mono shadow-sm"
               >
@@ -238,7 +241,7 @@ export default function App() {
                 <span className="text-[10px] uppercase font-bold tracking-wider text-[#A3A3A3]">
                   Template Details
                 </span>
-                
+
                 <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
                   <label className="text-xs font-medium text-[#6B6B6B]">Event Title</label>
                   <input
@@ -368,10 +371,10 @@ export default function App() {
         </aside>
 
         {/* Right Preview Stage */}
-        <main className="flex-1 flex flex-col bg-[#FAFAFA] overflow-hidden min-w-0">
-          {/* Scrollable Canvas Section */}
+        <main className="flex-1 flex flex-col bg-[#FAFAFA] min-w-0 md:h-full overflow-hidden">
+          {/* Canvas Section */}
           <div
-            className="flex-1 overflow-y-auto p-8 flex items-center justify-center relative"
+            className="flex-1 min-h-75 p-4 sm:p-8 flex items-center justify-center relative overflow-auto"
             style={{
               backgroundColor: '#FAFAFA',
               backgroundImage: 'radial-gradient(#D4D4D4 1.5px, transparent 1.5px)',
@@ -380,48 +383,53 @@ export default function App() {
               scrollbarColor: 'rgba(161, 161, 170, 0.4) transparent',
             }}
           >
-            {activeTab === 'id' && (
-              <div className="flex flex-col items-center gap-2 p-6 border border-[#E7E5E4] rounded-lg bg-white shadow-xs">
-                <span className="text-xs font-mono font-medium text-[#A3A3A3] uppercase tracking-wider">
-                  Generated Unique ID
-                </span>
-                <code className="text-2xl font-mono font-bold text-[#111111]">{generatedId}</code>
-              </div>
-            )}
+            <div className="max-w-full overflow-x-auto py-4 flex justify-center">
+              {activeTab === 'id' && (
+                <div className="flex flex-col items-center gap-2 p-4 sm:p-6 border border-[#E7E5E4] rounded-lg bg-white shadow-xs max-w-full">
+                  <span className="text-xs font-mono font-medium text-[#A3A3A3] uppercase tracking-wider text-center">
+                    Generated Unique ID
+                  </span>
+                  <code className="text-lg sm:text-2xl font-mono font-bold text-[#111111] break-all text-center">
+                    {generatedId}
+                  </code>
+                </div>
+              )}
 
-            {activeTab === 'qr' && (
-              <QuickQR value={generatedId} size={qrSize} errorCorrection={ecc} />
-            )}
+              {activeTab === 'qr' && (
+                <QuickQR value={generatedId} size={qrSize} errorCorrection={ecc} />
+              )}
 
-            {activeTab === 'barcode' && (
-              <QuickBarcode value={generatedId} format={barcodeFormat} />
-            )}
+              {activeTab === 'barcode' && (
+                <QuickBarcode value={generatedId} format={barcodeFormat} />
+              )}
 
-            {activeTab === 'badge' && (
-              <EventBadge id={generatedId} name={attendeeName} role={role} eventName={eventName} />
-            )}
+              {activeTab === 'badge' && (
+                <EventBadge id={generatedId} name={attendeeName} role={role} eventName={eventName} />
+              )}
 
-            {activeTab === 'ticket' && (
-              <EventTicket
-                id={generatedId}
-                eventName={eventName}
-                attendeeName={attendeeName}
-                tier={role}
-                date={ticketDate}
-                time={ticketTime}
-                gate={ticketGate}
-                seat={ticketSeat}
-              />
-            )}
+              {activeTab === 'ticket' && (
+                <EventTicket
+                  id={generatedId}
+                  eventName={eventName}
+                  attendeeName={attendeeName}
+                  tier={role}
+                  date={ticketDate}
+                  time={ticketTime}
+                  gate={ticketGate}
+                  seat={ticketSeat}
+                />
+              )}
+            </div>
           </div>
 
-          {/* Fixed Bottom Code Block with Uniform Height */}
+          {/* Bottom Code Block */}
           <div className="border-t border-[#E7E5E4] bg-[#111111] text-white p-4 font-mono z-10 shrink-0">
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] font-mono uppercase tracking-wider text-[#A3A3A3]">
                 React Code Snippet
               </span>
               <button
+                type="button"
                 onClick={handleCopyCode}
                 className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-[#262626] hover:bg-[#333333] border border-[#404040] rounded-md transition-colors font-mono font-bold uppercase tracking-wider text-white"
               >
