@@ -7,13 +7,14 @@ import { EventTicket } from '../src/templates/EventTicket';
 import { Copy, Check, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface CustomSelectProps<T extends string> {
+  id?: string;
   value: T;
   options: { value: T; label: string }[];
   onChange: (val: T) => void;
   width?: string;
 }
 
-function CustomSelect<T extends string>({ value, options, onChange, width = "w-32" }: CustomSelectProps<T>) {
+function CustomSelect<T extends string>({ id, value, options, onChange, width = "w-32" }: CustomSelectProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -32,6 +33,7 @@ function CustomSelect<T extends string>({ value, options, onChange, width = "w-3
   return (
     <div className={`relative ${width}`} ref={dropdownRef}>
       <button
+        id={id}
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className="w-full h-8 px-2.5 bg-white border border-[#111111] rounded-md text-xs font-mono text-[#111111] flex items-center justify-between shadow-xs transition-all focus:outline-none"
@@ -163,7 +165,7 @@ export default function App() {
       <div className="flex-1 flex flex-col md:flex-row min-h-0 relative overflow-y-auto md:overflow-hidden">
         {/* Left Controls Sidebar */}
         <aside className="w-full md:w-80 border-b md:border-b-0 md:border-r border-[#E7E5E4] flex flex-col bg-white z-10 shrink-0 md:h-full">
-          {/* Clean 5-Column Navigation Grid with hidden scrollbar fallback */}
+          {/* Clean 5-Column Navigation Grid */}
           <nav className="grid grid-cols-5 border-b border-[#E7E5E4] shrink-0 bg-white overflow-x-auto [scrollbar-none] [&::-webkit-scrollbar]:hidden">
             {(['id', 'qr', 'barcode', 'badge', 'ticket'] as const).map((tab) => {
               const isActive = activeTab === tab;
@@ -190,8 +192,10 @@ export default function App() {
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
-                <label className="text-xs font-medium text-[#6B6B6B]">Prefix</label>
+                <label htmlFor="prefix-input" className="text-xs font-medium text-[#6B6B6B]">Prefix</label>
                 <input
+                  id="prefix-input"
+                  name="prefix"
                   type="text"
                   value={prefix}
                   onChange={(e) => setPrefix(e.target.value)}
@@ -200,8 +204,10 @@ export default function App() {
               </div>
 
               <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
-                <label className="text-xs font-medium text-[#6B6B6B]">Length ({length})</label>
+                <label htmlFor="length-slider" className="text-xs font-medium text-[#6B6B6B]">Length ({length})</label>
                 <input
+                  id="length-slider"
+                  name="length"
                   type="range"
                   min="4"
                   max="32"
@@ -212,8 +218,9 @@ export default function App() {
               </div>
 
               <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
-                <label className="text-xs font-medium text-[#6B6B6B]">Charset</label>
+                <label htmlFor="charset-select" className="text-xs font-medium text-[#6B6B6B]">Charset</label>
                 <CustomSelect<'alphanumeric' | 'alpha' | 'numeric' | 'hex'>
+                  id="charset-select"
                   value={charset}
                   onChange={setCharset}
                   width="w-32"
@@ -243,8 +250,10 @@ export default function App() {
                 </span>
 
                 <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
-                  <label className="text-xs font-medium text-[#6B6B6B]">Event Title</label>
+                  <label htmlFor="event-name-input" className="text-xs font-medium text-[#6B6B6B]">Event Title</label>
                   <input
+                    id="event-name-input"
+                    name="eventName"
                     type="text"
                     value={eventName}
                     onChange={(e) => setEventName(e.target.value)}
@@ -253,8 +262,10 @@ export default function App() {
                 </div>
 
                 <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
-                  <label className="text-xs font-medium text-[#6B6B6B]">Attendee Name</label>
+                  <label htmlFor="attendee-name-input" className="text-xs font-medium text-[#6B6B6B]">Attendee Name</label>
                   <input
+                    id="attendee-name-input"
+                    name="attendeeName"
                     type="text"
                     value={attendeeName}
                     onChange={(e) => setAttendeeName(e.target.value)}
@@ -263,8 +274,10 @@ export default function App() {
                 </div>
 
                 <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
-                  <label className="text-xs font-medium text-[#6B6B6B]">Role / Tier</label>
+                  <label htmlFor="role-input" className="text-xs font-medium text-[#6B6B6B]">Role / Tier</label>
                   <input
+                    id="role-input"
+                    name="role"
                     type="text"
                     value={role}
                     onChange={(e) => setRole(e.target.value)}
@@ -275,8 +288,10 @@ export default function App() {
                 {activeTab === 'ticket' && (
                   <>
                     <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
-                      <label className="text-xs font-medium text-[#6B6B6B]">Date</label>
+                      <label htmlFor="ticket-date-input" className="text-xs font-medium text-[#6B6B6B]">Date</label>
                       <input
+                        id="ticket-date-input"
+                        name="ticketDate"
                         type="text"
                         value={ticketDate}
                         onChange={(e) => setTicketDate(e.target.value)}
@@ -285,8 +300,10 @@ export default function App() {
                     </div>
 
                     <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
-                      <label className="text-xs font-medium text-[#6B6B6B]">Time</label>
+                      <label htmlFor="ticket-time-input" className="text-xs font-medium text-[#6B6B6B]">Time</label>
                       <input
+                        id="ticket-time-input"
+                        name="ticketTime"
                         type="text"
                         value={ticketTime}
                         onChange={(e) => setTicketTime(e.target.value)}
@@ -295,8 +312,10 @@ export default function App() {
                     </div>
 
                     <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
-                      <label className="text-xs font-medium text-[#6B6B6B]">Gate</label>
+                      <label htmlFor="ticket-gate-input" className="text-xs font-medium text-[#6B6B6B]">Gate</label>
                       <input
+                        id="ticket-gate-input"
+                        name="ticketGate"
                         type="text"
                         value={ticketGate}
                         onChange={(e) => setTicketGate(e.target.value)}
@@ -305,8 +324,10 @@ export default function App() {
                     </div>
 
                     <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
-                      <label className="text-xs font-medium text-[#6B6B6B]">Seat</label>
+                      <label htmlFor="ticket-seat-input" className="text-xs font-medium text-[#6B6B6B]">Seat</label>
                       <input
+                        id="ticket-seat-input"
+                        name="ticketSeat"
                         type="text"
                         value={ticketSeat}
                         onChange={(e) => setTicketSeat(e.target.value)}
@@ -321,8 +342,10 @@ export default function App() {
             {activeTab === 'qr' && (
               <div className="pt-2 border-t border-[#E7E5E4] space-y-3">
                 <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
-                  <label className="text-xs font-medium text-[#6B6B6B]">Size ({qrSize}px)</label>
+                  <label htmlFor="qr-size-slider" className="text-xs font-medium text-[#6B6B6B]">Size ({qrSize}px)</label>
                   <input
+                    id="qr-size-slider"
+                    name="qrSize"
                     type="range"
                     min="128"
                     max="300"
@@ -334,8 +357,9 @@ export default function App() {
                 </div>
 
                 <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
-                  <label className="text-xs font-medium text-[#6B6B6B]">ECC Level</label>
+                  <label htmlFor="ecc-select" className="text-xs font-medium text-[#6B6B6B]">ECC Level</label>
                   <CustomSelect<'L' | 'M' | 'Q' | 'H'>
+                    id="ecc-select"
                     value={ecc}
                     onChange={setEcc}
                     width="w-36"
@@ -353,8 +377,9 @@ export default function App() {
             {activeTab === 'barcode' && (
               <div className="pt-2 border-t border-[#E7E5E4] space-y-3">
                 <div className="flex items-center justify-between h-10 border-b border-[#F5F5F5]">
-                  <label className="text-xs font-medium text-[#6B6B6B]">Format</label>
+                  <label htmlFor="barcode-format-select" className="text-xs font-medium text-[#6B6B6B]">Format</label>
                   <CustomSelect<'CODE128' | 'CODE39' | 'EAN13'>
+                    id="barcode-format-select"
                     value={barcodeFormat}
                     onChange={setBarcodeFormat}
                     width="w-32"
