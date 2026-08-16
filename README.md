@@ -10,7 +10,7 @@ ID-QR-Kit provides composable UI templates, native QR/barcode rendering, high-re
 
 * **Modular composition** — Pre-built templates for ID cards, event badges, and tickets.
 * **Native scannable assets** — QR code and barcode generation using matrix encoders.
-* **High-fidelity exporting** — Export DOM nodes as **PNG**, **SVG**, or **PDF**.
+* **High-fidelity exporting** — Export QR codes and barcodes as **PNG**, with **SVG** string output for QR codes. PDF export is planned (see [Roadmap](#roadmap)).
 * **Type-safe API** — Built entirely with **TypeScript**.
 * **Utility-first styling** — Powered by **Tailwind CSS**.
 * **Backend automation** — Includes a standalone Python script for headless batch generation.
@@ -95,30 +95,38 @@ npm install tailwindcss postcss autoprefixer
 ### Option B — Import from Library Entry
 
 ```tsx
-import { IDCard, QRCode, Barcode } from './src';
+import { EventBadge, EventTicket, QuickQR, QuickBarcode } from './src';
 
-export function UserProfileBadge() {
+export function AttendeeBadge() {
   return (
-    <div className="flex flex-col items-center p-4">
-      <IDCard
-        avatarUrl="/avatar.png"
-        department="Engineering"
+    <div className="flex flex-col items-center gap-4 p-4">
+      <EventBadge
+        id="ATT-042"
         name="Alex Mercer"
-        title="Systems Architect"
-      >
-        <QRCode
-          size={128}
-          value="https://github.com/s0um1kx/id-qr-kit"
-        />
+        role="Systems Architect"
+        eventName="HACKATHON 2026"
+      />
 
-        <Barcode
-          format="CODE128"
-          value="ID-98402-X"
-        />
-      </IDCard>
+      <QuickQR value="https://github.com/s0um1kx/id-qr-kit" size={128} />
+
+      <QuickBarcode value="ID-98402-X" format="CODE128" />
     </div>
   );
 }
+```
+
+`EventTicket` follows the same pattern for conference/event passes:
+
+```tsx
+<EventTicket
+  id="TCK-9284"
+  attendeeName="Alex Mercer"
+  eventName="TECH CONFERENCE 2026"
+  date="OCT 12, 2026"
+  seat="A-12"
+  gate="G3"
+  tier="VIP PASS"
+/>
 ```
 
 ---
@@ -198,17 +206,18 @@ id-qr-kit/
 
 Supported output formats:
 
-* PNG
-* SVG
-* PDF
+* PNG (QR codes and barcodes)
+* SVG string (QR codes, via `useQR`)
 
 Example:
 
 ```tsx
-const { exportPNG } = useExportCard(ref);
+const { dataUrl, downloadPNG } = useQR({ value: 'ID-98402-X', size: 200 });
 
-<button onClick={exportPNG}>Download PNG</button>
+<button onClick={() => downloadPNG('id-card.png')}>Download PNG</button>
 ```
+
+`useBarcode` exposes the same `dataUrl` / `downloadPNG` shape for barcodes. PDF export is on the [roadmap](#roadmap) but not yet implemented.
 
 ---
 
@@ -245,7 +254,7 @@ npm run lint      # Run linter
 Override Tailwind classes directly on templates or components:
 
 ```tsx
-<IDCard className="bg-slate-900 text-white border-slate-700" />
+<EventBadge className="bg-slate-900 text-white border-slate-700" ... />
 ```
 
 You may also extend `tailwind.config.js` with custom themes, spacing, or typography tokens.
@@ -255,6 +264,7 @@ You may also extend `tailwind.config.js` with custom themes, spacing, or typogra
 ## Roadmap
 
 * [ ] NPM package publishing
+* [ ] PDF export
 * [ ] React Native support
 * [ ] Print-optimized templates
 * [ ] Bulk export worker queue
